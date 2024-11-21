@@ -41,7 +41,7 @@ flip_coin({ player_guess }: { player_guess: Side  }): Side {
 # Quickstart
 
 1. Make sure you have installed [node.js](https://nodejs.org/en/download/package-manager/) >= 16.
-2. Install the [`NEAR CLI`](https://github.com/near/near-cli#setup)
+2. Install the [`NEAR CLI`](https://github.com/near/near-cli-rs)
 
 <br />
 
