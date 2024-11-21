@@ -30,15 +30,3 @@ FlipNEAR是一个基于NEAR区块链的去中心化硬币翻转游戏，用户�
 6. **历史记录查询**：
    - 用户可以查询往期游戏结果和自己的参与记录。
 
-### 技术实现：
-1. **前端**：
-   - 使用Nextjs
-   - 集成NEAR Wallet SDK，方便用户登录和交易。
-
-2. **后端**：
-   - 智能合约使用Rust编写，部署在NEAR区块链上。
-   - https://github.com/near-examples/coin-flip-examples/tree/main/contract-ts
-
-3. **测试**：
-   - 在NEAR TestNet上进行充分的测试，确保应用的稳定性和安全性。
-
