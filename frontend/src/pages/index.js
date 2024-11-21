@@ -1,10 +1,11 @@
 import styles from '@/styles/app.module.css';
 import { Button } from 'react-bootstrap';
+import Coin from '@/components/coin';
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <Button variant="primary">Bootstrap Button</Button>
+      <Coin />
     </main>
   );
 }

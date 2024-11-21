@@ -1,0 +1,75 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.coin {
+  width: 15rem;
+  height: 15rem;
+  position: relative;
+  perspective: 1000px; /* 定义3D视角 */
+  transform-style: preserve-3d; /* 子元素启用3D */
+  cursor: pointer;
+  transition: transform 1s ease-in-out;
+}
+
+.side {
+  position: absolute;
+  width: 15rem;
+  height: 15rem;
+  backface-visibility: hidden; /* 隐藏背面 */
+  border-radius: 50%;
+  border: 2px solid #333;
+}
+
+.front {
+  background: #ffe066;
+  transform: rotateY(0deg); /* 正面保持水平 */
+}
+
+.back {
+  background: #555;
+  transform: rotateY(180deg); /* 反面旋转180度 */
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%; /* 确保图片圆形 */
+  object-fit: cover;
+}
+
+.flipped {
+  transform: rotateY(180deg); /* 翻转到反面 */
+}
+
+.spinning {
+  animation: spin 2s infinite linear; /* 添加旋转动画 */
+}
+
+@keyframes spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
