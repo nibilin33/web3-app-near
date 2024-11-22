@@ -4,17 +4,18 @@ import styles from "@/styles/app.module.css";
 import { FlicpNearContract } from "@/config";
 import Coin from "@/components/coin";
 import BetMachine from "@/components/bet";
+import Confetti from "react-confetti";
+import { toast } from "react-toastify";
 // Contract that the app will interact with
 const CONTRACT = FlicpNearContract;
 
 export default function FlipNear() {
   const { signedAccountId, wallet } = useContext(NearContext);
 
-  const [points, setPoints] = useState(0);
-  const [choice, setChoice] = useState();
+  const [points, setPoints] = useState(0); // 赢得的金额
   const [result, setResult] = useState("");
   const [betConfig, setBetConfig] = useState({});
-  const [amount, setAmount] = useState("");
+  const [isWinner, setIsWinner] = useState(false);
 
   useEffect(() => {
     if (!wallet) return;
@@ -33,10 +34,6 @@ export default function FlipNear() {
     setPoints(points);
   }
   const placeBet = async () => {
-    if (betConfig.amount === "") {
-      alert("Please bet an amount");
-      return;
-    }
     await wallet.callMethod({
       contractId: CONTRACT,
       method: "place_bet",
@@ -51,6 +48,7 @@ export default function FlipNear() {
       method: "bet_flip_coin",
     });
     setResult(`Coin flip result: ${result}`);
+    setIsWinner(result === betConfig.side);
     await updateScore();
     return result;
   };
@@ -62,7 +60,16 @@ export default function FlipNear() {
     });
     setPoints(score);
   };
-
+  const handleHint = () => {
+    if (!signedAccountId) {
+      toast.error("Please log in before placing a bet");
+      return;
+    }
+    if(!betConfig.amount || !betConfig.side) {
+      toast.error("Please set the bet amount and side");
+      return;
+    }
+  }
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -71,7 +78,8 @@ export default function FlipNear() {
           <code className={styles.code}>{CONTRACT}</code>
         </p>
       </div>
-      <Coin onFlipComplete={flipCoin} disabled={!signedAccountId}/>
+      {isWinner && <Confetti />}
+      <Coin onFlipComplete={flipCoin} disabled={!signedAccountId && !betConfig.amount || !betConfig.side} onFlipClick={handleHint}/>
       <BetMachine onBet={setBetConfig}></BetMachine>
       {!signedAccountId && (
         <div className={styles.center}>

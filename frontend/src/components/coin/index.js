@@ -3,18 +3,26 @@ import Image from 'next/image';
 import styles from './coin.module.css';
 import HeadPng from '/public/head.png';
 import TailPng from '/public/tail.png';
+import {
+  BET_CHOICES
+} from '@/config';
 
-const Coin = ({onFlipComplete, disabled = false }) => {
+const Coin = ({onFlipComplete, disabled = false, onFlipClick }) => {
     const [isFlipped, setIsFlipped] = useState(false); // 是否翻转
     const [isSpinning, setIsSpinning] = useState(false); // 是否旋转中
   
     const flipCoin = async () => {
-      if(disabled) return; // 禁用状态不可翻转
+      if(onFlipClick) {
+        onFlipClick();
+      }
+      if(disabled) {
+        return;
+      }
       if (isSpinning) return; // 防止多次点击
       setIsSpinning(true);
       if(typeof onFlipComplete === 'function') {
         const result = await onFlipComplete();
-        setIsFlipped(result);
+        setIsFlipped(result === BET_CHOICES.HEAD);
         setIsSpinning(false);
         return;
       }
@@ -36,7 +44,7 @@ const Coin = ({onFlipComplete, disabled = false }) => {
       >
       {!isSpinning && <p className={styles.clickText}>Click me</p>}
        {/* 正面图片 */}
-      <div className={`${styles.side} ${styles.front}`}>
+        <div className={`${styles.side} ${styles.front}`}>
           <Image src={HeadPng} alt="Heads" className={styles.image} />
         </div>
         {/* 反面图片 */}

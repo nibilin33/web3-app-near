@@ -3,13 +3,12 @@ import Image from "next/image";
 import styles from "./bet.module.css";
 import BetPng from "/public/bet-m.png";
 import { Button } from "react-bootstrap";
-const BET_CHOICES =  {
-    HEAD: "heads",
-    TAIL: "tails",
-}
+import {
+    BET_CHOICES
+} from '@/config';
+
 const BetMachine = ({ onBet }) => {
   const [betCount, setBetCount] = useState(0);
-  const [showLimitReached, setShowLimitReached] = useState(false);
   const [selectedSide, setSelectedSide] = useState(BET_CHOICES.HEAD); // 新增状态变量
   const updateBetCount = (newBetCount) => {
     setBetCount(newBetCount);
@@ -19,14 +18,13 @@ const BetMachine = ({ onBet }) => {
             amount: newBetCount*0.1
         }); 
     }
-    setShowLimitReached(newBetCount<5);
   }
   const handleBet = () => {
     if (betCount < 5) {
         const newBetCount = betCount + 1;
         updateBetCount(newBetCount);
     } else {
-      setShowLimitReached(true);
+        toast.error("You have reached the bet limit");
     }
   };
   const handleReduceBet = () => {
@@ -69,10 +67,6 @@ const BetMachine = ({ onBet }) => {
           Reduce Bet
         </Button>
       </div>
-
-      {showLimitReached && (
-        <p className={styles.limitText}>You have reached the bet limit</p>
-      )}
     </div>
   );
 };
