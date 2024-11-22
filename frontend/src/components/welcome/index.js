@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./welcome.module.css";
+import DeadPool from "/public/deadpool-heart.gif";
 
 const WelcomeAnimation = ({ targetId }) => {
   const [isMoving, setIsMoving] = useState(true);
@@ -56,7 +57,7 @@ const WelcomeAnimation = ({ targetId }) => {
       <div
         className={styles.character}
         ref={characterRef}
-        style={{ backgroundImage: "url(/deadpool-heart.gif)" }}
+        style={{ backgroundImage: `url(${DeadPool.src})` }}
       >
         {showWelcomeText && <div className={styles.welcomeText}>Welcome！</div>}
       </div>

@@ -43,8 +43,6 @@ class CoinFlip {
   @call({})
   place_bet({ player_guess, amount }: { player_guess: Side, amount: string }): void {
     const player: AccountId = near.predecessorAccountId();
-    const deposit = BigInt(near.attachedDeposit());
-    const betAmount = BigInt(amount);
     near.log(`${player} placed a bet of ${amount} NEAR on ${player_guess}`);
     // if (deposit < betAmount) {
     //   throw new Error(`You need to attach at least ${betAmount} NEAR to play!`);
@@ -111,11 +109,12 @@ class CoinFlip {
       result: result ? 'win' : 'lose',
       timestamp: Number(near.blockTimestamp()),
     });
+    /*
     if(result){
       const reward = BigInt(bet.amount) * BigInt(2);
       const promiseIndex = near.promiseBatchCreate(player);
       near.promiseBatchActionTransfer(promiseIndex, reward);
-    }
+    }*/
   }
 
   // View how many points a specific player has

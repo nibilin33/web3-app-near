@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from './coin.module.css';
 import HeadPng from '/public/head.png';
@@ -10,8 +10,10 @@ import {
 const Coin = ({onFlipComplete, disabled = false, onFlipClick }) => {
     const [isFlipped, setIsFlipped] = useState(false); // 是否翻转
     const [isSpinning, setIsSpinning] = useState(false); // 是否旋转中
+    const [isShowText, setIsShowText] = useState(true); // 是否显示点击文字
   
     const flipCoin = async () => {
+      setIsShowText(false);
       if(onFlipClick) {
         onFlipClick();
       }
@@ -22,8 +24,10 @@ const Coin = ({onFlipComplete, disabled = false, onFlipClick }) => {
       setIsSpinning(true);
       if(typeof onFlipComplete === 'function') {
         const result = await onFlipComplete();
-        setIsFlipped(result === BET_CHOICES.HEAD);
-        setIsSpinning(false);
+        setTimeout(() => {
+            setIsFlipped(result === BET_CHOICES.HEAD);
+            setIsSpinning(false);
+        },1000);
         return;
       }
       // 模拟旋转 2 秒后随机确定正反面
@@ -42,7 +46,7 @@ const Coin = ({onFlipComplete, disabled = false, onFlipClick }) => {
         }`}
         onClick={flipCoin}
       >
-      {!isSpinning && <p className={styles.clickText}>Click me</p>}
+      { isShowText && <p className={styles.clickText}>Click me</p>}
        {/* 正面图片 */}
         <div className={`${styles.side} ${styles.front}`}>
           <Image src={HeadPng} alt="Heads" className={styles.image} />

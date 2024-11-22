@@ -7,7 +7,7 @@ import WelcomeAnimation from "@/components/welcome";
 
 export default function Home() {
   const { signedAccountId } = useContext(NearContext);
-  const [isFirstVisit, setIsFirstVisit] = useState(false);
+  const [isFirstVisit, setIsFirstVisit] = useState(true);
 
   useEffect(() => {
     if (typeof window !== "undefined") {

@@ -19,7 +19,7 @@ export default function FlipNear() {
     if (!wallet) return;
     initData();
   }, [signedAccountId]);
-
+  
   async function initData() {
     if (!signedAccountId) {
       return;
@@ -53,6 +53,9 @@ export default function FlipNear() {
       })
       setResult(`Coin flip result: ${result}`);
       setIsWinner(result === betConfig.side);
+      setTimeout(()=>{
+        setIsWinner(false);
+      }, 2000);
       await updateScore();
       return result;
     } catch (error) {
@@ -89,7 +92,7 @@ export default function FlipNear() {
           <code className={styles.code}>{FlicpNearContract}</code>
         </p>
       </div>
-      <p>Your current Score: {points}</p>
+      <p>Your current Score: <span className="ms-2 badge bg-secondary">{points}</span></p>
       {isWinner && <Confetti />}
       <Coin
         onFlipComplete={flipCoin}
