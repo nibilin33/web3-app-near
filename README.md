@@ -1,5 +1,6 @@
 # web3-app-near
-a demo for web3 app by using near
+a demo for web3 app by using near      
+![demo](https://github.com/nibilin33/web3-app-near/raw/main/assets/demo.png)
 
 ### FlipNEAR - Coin Flip Game on NEAR Protocol
 

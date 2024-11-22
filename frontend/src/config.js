@@ -22,3 +22,7 @@ const evmWalletChains = {
 export const NetworkId = 'testnet';
 export const FlicpNearContract = contractPerNetwork[NetworkId];
 export const EVMWalletChain = evmWalletChains[NetworkId];
+export const BET_CHOICES =  {
+  HEAD: "heads",
+  TAIL: "tails",
+}

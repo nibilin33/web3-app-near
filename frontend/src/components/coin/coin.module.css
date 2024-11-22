@@ -48,7 +48,18 @@
 .spinning {
   animation: spin 2s infinite linear; /* 添加旋转动画 */
 }
-
+.clickText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 255, 255, 0.5);
+  pointer-events: none; 
+  z-index: 1;
+}
 @keyframes spin {
   from {
     transform: rotateY(0deg);
@@ -56,20 +67,4 @@
   to {
     transform: rotateY(360deg);
   }
-}
-
-.button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #0070f3;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
 }
