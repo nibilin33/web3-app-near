@@ -1,6 +1,7 @@
 # web3-app-near
-a demo for web3 app by using near
-[3d model](https://sketchfab.com/3d-models/deadpool-359b8b268695409089bade4232c738a0#download)
+a demo for web3 app by using near      
+![demo](https://github.com/nibilin33/web3-app-near/raw/main/assets/demo.png)
+
 ### FlipNEAR - Coin Flip Game on NEAR Protocol
 
 ### 应用概念：
