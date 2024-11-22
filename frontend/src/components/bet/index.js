@@ -40,7 +40,7 @@ const BetMachine = ({ onBet }) => {
     <div className={styles.container}>
       <div className={styles.betStack}>
         {[...Array(betCount)].map((_, index) => (
-          <Image src={BetPng} alt="Bill" className={styles.bill} />
+          <Image src={BetPng} alt="Bill" key={index} className={styles.bill} />
         ))}
       </div>
       <div className={styles.sideSelector}>
