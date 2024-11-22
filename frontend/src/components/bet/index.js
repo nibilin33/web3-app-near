@@ -15,7 +15,7 @@ const BetMachine = ({ onBet }) => {
     if(onBet) {
         onBet({
             side: selectedSide,
-            amount: newBetCount*0.1
+            amount: newBetCount
         }); 
     }
   }

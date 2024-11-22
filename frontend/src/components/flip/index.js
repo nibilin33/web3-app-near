@@ -6,8 +6,6 @@ import Coin from "@/components/coin";
 import BetMachine from "@/components/bet";
 import Confetti from "react-confetti";
 import { toast } from "react-toastify";
-// Contract that the app will interact with
-const CONTRACT = FlicpNearContract;
 
 export default function FlipNear() {
   const { signedAccountId, wallet } = useContext(NearContext);
@@ -20,66 +18,84 @@ export default function FlipNear() {
   useEffect(() => {
     if (!wallet) return;
     initData();
-  }, [wallet]);
+  }, [signedAccountId]);
 
   async function initData() {
     if (!signedAccountId) {
       return;
     }
     const points = await wallet.viewMethod({
-      contractId: CONTRACT,
+      contractId: FlicpNearContract,
       method: "points_of",
-      args: { player: signedAccountId },
+      args: { player: signedAccountId }
     });
     setPoints(points);
   }
   const placeBet = async () => {
+    console.log(betConfig);
     await wallet.callMethod({
-      contractId: CONTRACT,
+      contractId: FlicpNearContract,
       method: "place_bet",
-      args: { player_guess: betConfig.side, amount: betConfig.amount},
-      amount: betConfig.amount,
+      args: { player_guess: betConfig.side, amount: betConfig.amount },
+      attachedDeposit: '1000000000000000000000000' // 1 NEAR in yoctoNEAR
     });
   };
   const flipCoin = async () => {
-    await placeBet();
-    const result = await wallet.callMethod({
-      contractId: CONTRACT,
-      method: "bet_flip_coin",
-    });
-    setResult(`Coin flip result: ${result}`);
-    setIsWinner(result === betConfig.side);
-    await updateScore();
-    return result;
+    try {
+      await placeBet();
+      await wallet.callMethod({
+        contractId: FlicpNearContract,
+        method: "bet_flip_coin",
+      });
+      const result = await wallet.callMethod({
+        contractId: FlicpNearContract,
+        method: "get_outcome_of"
+      })
+      setResult(`Coin flip result: ${result}`);
+      setIsWinner(result === betConfig.side);
+      await updateScore();
+      return result;
+    } catch (error) {
+      toast.error(error.message);
+      return betConfig.side;
+    }
   };
   const updateScore = async () => {
-    const score = await wallet.viewMethod({
-      contractId: CONTRACT,
-      method: "points_of",
-      args: { player: signedAccountId },
-    });
-    setPoints(score);
+    try {
+      const score = await wallet.viewMethod({
+        contractId: FlicpNearContract,
+        method: "points_of"
+      });
+      setPoints(score);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   const handleHint = () => {
     if (!signedAccountId) {
       toast.error("Please log in before placing a bet");
       return;
     }
-    if(!betConfig.amount || !betConfig.side) {
+    if (!betConfig.amount || !betConfig.side) {
       toast.error("Please set the bet amount and side");
       return;
     }
-  }
+  };
   return (
     <main className={styles.main}>
       <div className={styles.description}>
         <p>
           Interacting with the contract &nbsp;
-          <code className={styles.code}>{CONTRACT}</code>
+          <code className={styles.code}>{FlicpNearContract}</code>
         </p>
       </div>
+      <p>Your current Score: {points}</p>
       {isWinner && <Confetti />}
-      <Coin onFlipComplete={flipCoin} disabled={!signedAccountId && !betConfig.amount || !betConfig.side} onFlipClick={handleHint}/>
+      <Coin
+        onFlipComplete={flipCoin}
+        disabled={(!signedAccountId && !betConfig.amount) || !betConfig.side}
+        onFlipClick={handleHint}
+      />
       <BetMachine onBet={setBetConfig}></BetMachine>
       {!signedAccountId && (
         <div className={styles.center}>
