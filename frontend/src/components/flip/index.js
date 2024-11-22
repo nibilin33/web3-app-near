@@ -1,10 +1,9 @@
 import { useState, useEffect, useContext } from "react";
-
 import { NearContext } from "@/wallets/near";
 import styles from "@/styles/app.module.css";
 import { FlicpNearContract } from "@/config";
-import { Cards } from "@/components/cards";
-
+import Coin from "@/components/coin";
+import BetMachine from "@/components/bet";
 // Contract that the app will interact with
 const CONTRACT = FlicpNearContract;
 
@@ -14,62 +13,46 @@ export default function FlipNear() {
   const [points, setPoints] = useState(0);
   const [choice, setChoice] = useState();
   const [result, setResult] = useState("");
+  const [betConfig, setBetConfig] = useState({});
   const [amount, setAmount] = useState("");
-  const [guess, setGuess] = useState("heads");
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [showSpinner, setShowSpinner] = useState(false);
 
   useEffect(() => {
     if (!wallet) return;
     initData();
   }, [wallet]);
 
-  useEffect(() => {
-    setLoggedIn(!!signedAccountId);
-  }, [signedAccountId]);
   async function initData() {
-    if (!wallet.isSignedIn()) {
-      wallet.requestSignIn(CONTRACT);
-    } else {
-      const points = await wallet.viewMethod({
-        contractId: CONTRACT,
-        method: "points_of",
-        args: { player: signedAccountId },
-      });
-      setPoints(points);
+    if (!signedAccountId) {
+      return;
     }
+    const points = await wallet.viewMethod({
+      contractId: CONTRACT,
+      method: "points_of",
+      args: { player: signedAccountId },
+    });
+    setPoints(points);
   }
   const placeBet = async () => {
-    if (amount === "") {
-      alert("Please enter an amount");
+    if (betConfig.amount === "") {
+      alert("Please bet an amount");
       return;
     }
     await wallet.callMethod({
       contractId: CONTRACT,
       method: "place_bet",
-      args: { player_guess: guess, amount: amount },
-      amount: amount,
+      args: { player_guess: betConfig.side, amount: betConfig.amount},
+      amount: betConfig.amount,
     });
-    alert("Bet placed successfully!");
-  };
-  const handleChoice = async (guess) => {
-    setChoice(guess);
-    const outcome = await wallet.callMethod({
-      contractId: CONTRACT,
-      method: "flip_coin",
-      args: { player_guess: guess },
-    });
-    await updateScore();
   };
   const flipCoin = async () => {
-    setShowSpinner(true);
+    await placeBet();
     const result = await wallet.callMethod({
       contractId: CONTRACT,
       method: "bet_flip_coin",
     });
     setResult(`Coin flip result: ${result}`);
     await updateScore();
-    setShowSpinner(false);
+    return result;
   };
   const updateScore = async () => {
     const score = await wallet.viewMethod({
@@ -84,17 +67,19 @@ export default function FlipNear() {
     <main className={styles.main}>
       <div className={styles.description}>
         <p>
-          Interacting with the contract: &nbsp;
+          Interacting with the contract &nbsp;
           <code className={styles.code}>{CONTRACT}</code>
         </p>
       </div>
-
-      <div className={styles.center}>
-        <div className="w-100 text-end align-text-center" hidden={loggedIn}>
-          <p className="m-0"> Please login to change the greeting </p>
+      <Coin onFlipComplete={flipCoin} disabled={!signedAccountId}/>
+      <BetMachine onBet={setBetConfig}></BetMachine>
+      {!signedAccountId && (
+        <div className={styles.center}>
+          <div className="w-100 text-end align-text-center">
+            <p className="m-0"> Please log in before placing a bet </p>
+          </div>
         </div>
-      </div>
-      <Cards />
+      )}
     </main>
   );
 }

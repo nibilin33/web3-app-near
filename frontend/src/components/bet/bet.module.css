@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4rem;
+  padding-bottom: 3rem;
+}
+
+.betStack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.bill {
+  width: 100px;
+  height: 50px;
+  margin-top: -30px; /* 使纸币堆叠 */
+}
+.buttonContainer {
+  display: flex;
+  gap: 10px;
+}
+.betButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.limitText {
+  color: red;
+  margin-top: 10px;
+}
+.sideSelector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.sideButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
