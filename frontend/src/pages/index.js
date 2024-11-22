@@ -1,5 +1,4 @@
 import styles from '@/styles/app.module.css';
-import { Button } from 'react-bootstrap';
 import Coin from '@/components/coin';
 
 export default function Home() {

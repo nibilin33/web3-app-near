@@ -36,9 +36,6 @@ const Coin = () => {
           <Image src={TailPng} alt="Tails" className={styles.image} />
         </div>
       </div>
-      <Button onClick={flipCoin}>
-        Flip Coin
-      </Button>
     </div>
   );
 };

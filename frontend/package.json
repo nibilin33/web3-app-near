@@ -30,6 +30,7 @@
     "react": "^18",
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18",
+    "three": "^0.170.0",
     "wagmi": "^2.12.16"
   },
   "overrides": {
