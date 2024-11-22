@@ -1,4 +1,5 @@
 node_modules
 .next
+frontend/build
 contract/build
 contract/node_modules
