@@ -103,12 +103,12 @@ class CoinFlip {
       result: result ? 'win' : 'lose',
       timestamp: Number(near.blockTimestamp()),
     });
-    /*
+    
     if(result){
-      const reward = BigInt(bet.amount) * BigInt(2);
+      const reward = BigInt(amount) * BigInt(2);
       const promiseIndex = near.promiseBatchCreate(player);
       near.promiseBatchActionTransfer(promiseIndex, reward);
-    }*/
+    }
     return outcome;
   }
 

@@ -11,12 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const firstVisit = localStorage.getItem("isFirstVisit") === null && !signedAccountId;
-      setIsFirstVisit(firstVisit);
-
-      if (signedAccountId) {
-        localStorage.setItem("isFirstVisit", "false");
-      }
+      setIsFirstVisit(!signedAccountId);
     }
   }, [signedAccountId]);
 
