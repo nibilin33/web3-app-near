@@ -1,4 +1,4 @@
-import { NearBindgen, near, call, view, UnorderedMap, Vector } from 'near-sdk-js';
+import { NearBindgen, near, call, view, UnorderedMap, Vector, NearPromise } from 'near-sdk-js';
 import { AccountId } from 'near-sdk-js/lib/types';
 
 type Side = 'heads' | 'tails'
@@ -81,17 +81,11 @@ class CoinFlip {
     return outcome
   }
   @call({})
-  bet_flip_coin() {
+  bet_flip_coin({ player_guess, amount }: { player_guess: Side, amount: string }) {
     const player: AccountId = near.predecessorAccountId();
-    const bet = this.bets.pop();
-    if (!bet || bet.player !== player) {
-      throw new Error("No bet found for player");
-    }
-
     const outcome = simulateCoinFlip();
     let player_points: number = this.points.get(player, { defaultValue: 0 });
-    const result = bet.player_guess === outcome;
-    this.outcomes.set(player, outcome);
+    const result = player_guess === outcome;
     if (result) {
       near.log(`The result was ${outcome}, ${player} wins!`);
       player_points += 1;
@@ -103,9 +97,9 @@ class CoinFlip {
       // 存储游戏结果
     this.game_results.push({
       player,
-      player_guess: bet.player_guess,
+      player_guess: player_guess,
       outcome,
-      amount: bet.amount,
+      amount: amount,
       result: result ? 'win' : 'lose',
       timestamp: Number(near.blockTimestamp()),
     });
@@ -115,6 +109,7 @@ class CoinFlip {
       const promiseIndex = near.promiseBatchCreate(player);
       near.promiseBatchActionTransfer(promiseIndex, reward);
     }*/
+    return outcome;
   }
 
   // View how many points a specific player has

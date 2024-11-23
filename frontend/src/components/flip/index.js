@@ -37,26 +37,30 @@ export default function FlipNear() {
       contractId: FlicpNearContract,
       method: "place_bet",
       args: { player_guess: betConfig.side, amount: betConfig.amount },
-      attachedDeposit: '1000000000000000000000000' // 1 NEAR in yoctoNEAR
+      // attachedDeposit: '1000000000000000000000000' 
     });
   };
+  const handleFlip = async () => {
+    await wallet.callMethod({
+      contractId: FlicpNearContract,
+      method: "flip_coin",
+      args: { player_guess: betConfig.side }
+    });
+  }
   const flipCoin = async () => {
     try {
-      await placeBet();
-      await wallet.callMethod({
-        contractId: FlicpNearContract,
-        method: "bet_flip_coin",
-      });
       const result = await wallet.callMethod({
         contractId: FlicpNearContract,
-        method: "get_outcome_of"
-      })
+        method: "bet_flip_coin",
+        args: { player_guess: betConfig.side, amount: betConfig.amount}
+      });
+      console.log("flipCoin result", result);
       setResult(`Coin flip result: ${result}`);
       setIsWinner(result === betConfig.side);
+      await updateScore();
       setTimeout(()=>{
         setIsWinner(false);
-      }, 2000);
-      await updateScore();
+      }, 4000);
       return result;
     } catch (error) {
       toast.error(error.message);
@@ -67,7 +71,8 @@ export default function FlipNear() {
     try {
       const score = await wallet.viewMethod({
         contractId: FlicpNearContract,
-        method: "points_of"
+        method: "points_of",
+        args: { player: signedAccountId }
       });
       setPoints(score);
     } catch (error) {
@@ -93,6 +98,7 @@ export default function FlipNear() {
         </p>
       </div>
       <p>Your current Score: <span className="ms-2 badge bg-secondary">{points}</span></p>
+      <p className="ms-2 badge bg-secondary">{result}</p>
       {isWinner && <Confetti />}
       <Coin
         onFlipComplete={flipCoin}

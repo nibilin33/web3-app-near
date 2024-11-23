@@ -17,7 +17,6 @@ export const Navigation = () => {
 
   useEffect(() => {
     if (!wallet) return;
-
     if (signedAccountId) {
       setAction(() => wallet.signOut);
       setLabel(`${Labels.LOUGOUT} ${signedAccountId}`);

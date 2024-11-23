@@ -4,11 +4,11 @@ import '@/styles/globals.css';
 import "react-toastify/dist/ReactToastify.css";
 import { Navigation } from '@/components/navigation';
 import { Wallet, NearContext } from '@/wallets/near';
-import { NetworkId } from '@/config';
+import { NetworkId,FlicpNearContract } from '@/config';
 import { ToastContainer } from "react-toastify";
 
 
-const wallet = new Wallet({ networkId: NetworkId });
+const wallet = new Wallet({ networkId: NetworkId,createAccessKeyFor: FlicpNearContract });
 
 export default function MyApp({ Component, pageProps }) {
   const [signedAccountId, setSignedAccountId] = useState('');

@@ -5,8 +5,9 @@ import { FlicpNearContract } from "@/config";
 
 
 export default function History() {
-  const { wallet } = useContext(NearContext);
+  const { wallet, signedAccountId } = useContext(NearContext);
   const [results, setResults] = useState([]);
+  const [bets, setBets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -23,8 +24,13 @@ export default function History() {
         contractId: FlicpNearContract,
         method: "get_game_results"
       });
-      console.log("get_game_results",data);
       setResults(data);
+      const bets = await wallet.viewMethod({
+        contractId: FlicpNearContract,
+        method: "get_user_records",
+        args: { player: signedAccountId }
+      });
+      setBets(bets);
       setLoading(false);
     } catch (error) {
       setError(error.message);
@@ -55,15 +61,39 @@ export default function History() {
 
   return (
     <Container className="mt-5">
-      <h1 className="mb-4">Game Results</h1>
+      <h1 className="mb-4">Bet History</h1>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>#</th>
             <th>Player</th>
             <th>Player Guess</th>
-            <th>Outcome</th>
             <th>Amount</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bets.map((result, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{result.player}</td>
+              <td>{result.player_guess}</td>
+              <td>{result.amount} NEAR</td>
+              <td>{new Date(result.timestamp / 1e6).toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      <h1 className="mb-4">Game Results</h1>
+      
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            {/* <th>Player Guess</th> */}
+            <th>Outcome</th>
+            {/* <th>Amount</th> */}
             <th>Result</th>
             <th>Timestamp</th>
           </tr>
@@ -73,15 +103,17 @@ export default function History() {
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{result.player}</td>
-              <td>{result.player_guess}</td>
+              {/* <td>{result.player_guess}</td> */}
               <td>{result.outcome}</td>
-              <td>{result.amount} NEAR</td>
+              {/* <td>{result.amount} NEAR</td> */}
               <td>{result.result === "win" ? "Win" : "Lose"}</td>
               <td>{new Date(result.timestamp / 1e6).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>
       </Table>
+    
+     
     </Container>
   );
 }
