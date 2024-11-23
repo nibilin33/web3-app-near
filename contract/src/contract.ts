@@ -1,4 +1,4 @@
-import { NearBindgen, near, call, view, UnorderedMap, Vector, NearPromise } from 'near-sdk-js';
+import { NearBindgen, near, call, view, UnorderedMap, Vector } from 'near-sdk-js';
 import { AccountId } from 'near-sdk-js/lib/types';
 
 type Side = 'heads' | 'tails'
@@ -57,10 +57,15 @@ class CoinFlip {
     const user: AccountId = near.predecessorAccountId();
     near.log(`User ${user} registered.`);
   }
+  @view({})
+  get_current_deposit(): string {
+    return near.attachedDeposit.toString();
+  }
   @call({})
   flip_coin({ player_guess }: { player_guess: Side }): Side {
     // Check who called the method
     const player: AccountId = near.predecessorAccountId();
+    
     near.log(`${player} chose ${player_guess}`);
 
     // Simulate a Coin Flip
@@ -86,6 +91,8 @@ class CoinFlip {
   @call({})
   bet_flip_coin({ player_guess, amount }: { player_guess: Side, amount: string }) {
     const player: AccountId = near.predecessorAccountId();
+    const deposit = near.attachedDeposit();
+    near.log(`${player} chose ${player_guess} and bet ${amount} NEAR and deposited ${deposit} NEAR`);
     const outcome = simulateCoinFlip();
     let player_points: number = this.points.get(player, { defaultValue: 0 });
     const result = player_guess === outcome;

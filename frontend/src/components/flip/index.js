@@ -9,7 +9,6 @@ import { toast } from "react-toastify";
 
 export default function FlipNear() {
   const { signedAccountId, wallet } = useContext(NearContext);
-
   const [points, setPoints] = useState(0); // 赢得的金额
   const [result, setResult] = useState("");
   const [betConfig, setBetConfig] = useState({});
@@ -52,7 +51,8 @@ export default function FlipNear() {
       const result = await wallet.callMethod({
         contractId: FlicpNearContract,
         method: "bet_flip_coin",
-        args: { player_guess: betConfig.side, amount: betConfig.amount}
+        args: { player_guess: betConfig.side, amount: betConfig.amount},
+        amount: betConfig.amount,
       });
       console.log("flipCoin result", result);
       setResult(`Coin flip result: ${result}`);
