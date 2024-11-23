@@ -4,6 +4,7 @@ import styles from "./bet.module.css";
 import BetPng from "/public/bet-m.png";
 import { Button } from "react-bootstrap";
 import { NearContext } from "@/wallets/near";
+import { toast } from "react-toastify";
 import {
     BET_CHOICES
 } from '@/config';
