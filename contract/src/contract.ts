@@ -20,9 +20,12 @@ interface GameResult {
 function simulateCoinFlip(): Side {
   // randomSeed creates a random string, learn more about it in the README
   const randomString: string = near.randomSeed().toString();
-
+  let randomValue = 0;
+  for (let i = 0; i < randomString.length; i++) {
+    randomValue += randomString.charCodeAt(i);
+  }
   // If the last charCode is even we choose heads, otherwise tails
-  return randomString.charCodeAt(0) % 2 ? 'heads' : 'tails';
+  return randomValue % 2 ? 'heads' : 'tails';
 }
 
 
