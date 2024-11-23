@@ -25,7 +25,7 @@ const Coin = ({onFlipComplete, disabled = false, onFlipClick }) => {
       if(typeof onFlipComplete === 'function') {
         const result = await onFlipComplete();
         setTimeout(() => {
-            setIsFlipped(result === BET_CHOICES.HEAD);
+            setIsFlipped(result === BET_CHOICES.TAIL);
             setIsSpinning(false);
         },1000);
         return;
