@@ -30,22 +30,6 @@ export default function FlipNear() {
     });
     setPoints(points);
   }
-  const placeBet = async () => {
-    console.log(betConfig);
-    await wallet.callMethod({
-      contractId: FlicpNearContract,
-      method: "place_bet",
-      args: { player_guess: betConfig.side, amount: betConfig.amount },
-      // attachedDeposit: '1000000000000000000000000' 
-    });
-  };
-  const handleFlip = async () => {
-    await wallet.callMethod({
-      contractId: FlicpNearContract,
-      method: "flip_coin",
-      args: { player_guess: betConfig.side }
-    });
-  }
   const flipCoin = async () => {
     try {
       const result = await wallet.callMethod({

@@ -1,4 +1,4 @@
-import { NearBindgen, near, call, view, UnorderedMap, Vector } from 'near-sdk-js';
+import { NearBindgen, near, call, view, UnorderedMap, Vector, NearPromise } from 'near-sdk-js';
 import { AccountId } from 'near-sdk-js/lib/types';
 
 type Side = 'heads' | 'tails'
@@ -115,7 +115,8 @@ class CoinFlip {
     });
     
     if(result){
-      const reward = BigInt(amount) * BigInt(2);
+      const reward = BigInt(amount);
+      // NearPromise.new(player).transfer(reward);
       const promiseIndex = near.promiseBatchCreate(player);
       near.promiseBatchActionTransfer(promiseIndex, reward);
     }
