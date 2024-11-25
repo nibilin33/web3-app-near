@@ -175,4 +175,11 @@ class CoinFlip {
     }
     return userRecords;
   }
+  @call({})
+  clear_all_records(): void {
+    this.points.clear();
+    this.bets.clear();
+    this.game_results.clear();
+    this.outcomes.clear();
+  }
 }
