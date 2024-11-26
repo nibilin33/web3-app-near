@@ -6,7 +6,7 @@ import Coin from "@/components/coin";
 import BetMachine from "@/components/bet";
 import Confetti from "react-confetti";
 import { toast } from "react-toastify";
-
+import { utils } from 'near-api-js';
 export default function FlipNear() {
   const { signedAccountId, wallet } = useContext(NearContext);
   const [points, setPoints] = useState(0); // 赢得的金额
@@ -37,6 +37,7 @@ export default function FlipNear() {
         method: "bet_flip_coin",
         args: { player_guess: betConfig.side, amount: betConfig.amount},
         amount: betConfig.amount,
+        attachedDeposit:utils.format.parseNearAmount(betConfig.amount.toString())
       });
       console.log("flipCoin result", result);
       setResult(`Coin flip result: ${result}`);
